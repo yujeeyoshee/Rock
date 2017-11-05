@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val notifactionManager = getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager
 
         val enableNotificationSwitch = findViewById<Switch>(R.id.enable_notification_switch)
         enableNotificationSwitch.setOnCheckedChangeListener { _, isChecked ->
@@ -30,10 +30,10 @@ class MainActivity : AppCompatActivity() {
                         .setContentText("world")
                         .setSmallIcon(R.drawable.ic_stat_onesignal_default)
                         .build()
-                notifactionManager?.notify(NOTIFY_ID, notificationPayload);
+                notificationManager?.notify(NOTIFY_ID, notificationPayload)
                 Log.w(LOG_TAG, "on")
             } else {
-                notifactionManager?.cancel(NOTIFY_ID);
+                notificationManager?.cancel(NOTIFY_ID)
                 Log.w(LOG_TAG, "off")
             }
 
