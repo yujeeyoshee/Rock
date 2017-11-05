@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">Screenshot</string>
-    <string name="allow_click_on_notification_for_screenshot">Enable notification for screenshot</string>
+    <string name="enable_notification_for_screenshot">Enable notification for screenshot</string>
 </resources>
