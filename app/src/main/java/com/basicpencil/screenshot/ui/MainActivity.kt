@@ -12,7 +12,7 @@ import com.basicpencil.screenshot.receiver.NotificationBroadcastReceiver
 import android.app.PendingIntent
 import android.content.Intent
 
-class MainActivity : AppCompatActivity() {
+class MainActivity: AppCompatActivity() {
 
     companion object {
         val ACTION_NOTIFICATION_CANCELED = "notification_canceled"
@@ -27,14 +27,14 @@ class MainActivity : AppCompatActivity() {
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager
 
         val enableNotificationSwitch = findViewById<Switch>(R.id.enable_notification_switch)
-        enableNotificationSwitch.setOnCheckedChangeListener { _, isChecked ->
+        enableNotificationSwitch?.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
-                val deleteIntent = createPendingDeleteIntent()
+                val onDismissedIntent = createOnDismissedPendingIntent()
                 val notificationPayload = Notification.Builder(this)
                         .setContentTitle("Hello")
                         .setContentText("world")
                         .setSmallIcon(R.drawable.ic_stat_onesignal_default)
-                        .setDeleteIntent(deleteIntent)
+                        .setDeleteIntent(onDismissedIntent)
                         .build()
                 notificationManager?.notify(NOTIFY_ID, notificationPayload)
                 Log.w(LOG_TAG, "on")
@@ -42,11 +42,10 @@ class MainActivity : AppCompatActivity() {
                 notificationManager?.cancel(NOTIFY_ID)
                 Log.w(LOG_TAG, "off")
             }
-
         }
     }
 
-    private fun createPendingDeleteIntent() : PendingIntent {
+    private fun createOnDismissedPendingIntent(): PendingIntent {
         val intent = Intent(this, NotificationBroadcastReceiver::class.java)
         intent.action = ACTION_NOTIFICATION_CANCELED
         return PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT)
