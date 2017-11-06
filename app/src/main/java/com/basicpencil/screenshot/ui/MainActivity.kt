@@ -8,12 +8,16 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Switch
 import com.basicpencil.screenshot.R
+import com.basicpencil.screenshot.receiver.NotificationBroadcastReceiver
+import android.app.PendingIntent
+import android.content.Intent
 
 class MainActivity : AppCompatActivity() {
 
     companion object {
-        val LOG_TAG = MainActivity::class.qualifiedName
-        val NOTIFY_ID = 54321
+        val ACTION_NOTIFICATION_CANCELED = "notification_canceled"
+        private val LOG_TAG = MainActivity::class.qualifiedName
+        private val NOTIFY_ID = 54321
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,10 +29,12 @@ class MainActivity : AppCompatActivity() {
         val enableNotificationSwitch = findViewById<Switch>(R.id.enable_notification_switch)
         enableNotificationSwitch.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
+                val deleteIntent = createPendingDeleteIntent()
                 val notificationPayload = Notification.Builder(this)
                         .setContentTitle("Hello")
                         .setContentText("world")
                         .setSmallIcon(R.drawable.ic_stat_onesignal_default)
+                        .setDeleteIntent(deleteIntent)
                         .build()
                 notificationManager?.notify(NOTIFY_ID, notificationPayload)
                 Log.w(LOG_TAG, "on")
@@ -38,5 +44,11 @@ class MainActivity : AppCompatActivity() {
             }
 
         }
+    }
+
+    private fun createPendingDeleteIntent() : PendingIntent {
+        val intent = Intent(this, NotificationBroadcastReceiver::class.java)
+        intent.action = ACTION_NOTIFICATION_CANCELED
+        return PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT)
     }
 }
