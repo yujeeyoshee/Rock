@@ -50,8 +50,8 @@ class MainActivity: AppCompatActivity() {
             if (isChecked) {
                 val onDismissedIntent = createOnDismissedPendingIntent()
                 val notificationPayload = Notification.Builder(this)
-                        .setContentTitle("Hello")
-                        .setContentText("world")
+                        .setContentTitle(getString(R.string.easiest_screenshot))
+                        .setContentText(getString(R.string.notification_content))
                         .setSmallIcon(R.drawable.ic_stat_onesignal_default)
                         .setDeleteIntent(onDismissedIntent)
                         .build()
