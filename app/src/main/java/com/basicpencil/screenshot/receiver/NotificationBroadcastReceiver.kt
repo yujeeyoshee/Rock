@@ -14,6 +14,10 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         when (intent.action) {
+            MainActivity.ACTION_NOTIFICATION_CLICKED -> {
+                Log.w(LOG_TAG, intent.action)
+            }
+
             MainActivity.ACTION_NOTIFICATION_CANCELED -> {
                 Log.w(LOG_TAG, intent.action)
                 val intent = Intent(MainActivity.LOCAL_NOTIFICATION_DISMISSED)

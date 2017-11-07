@@ -17,7 +17,13 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".receiver.NotificationBroadcastReceiver" />
+        <receiver
+            android:name=".receiver.NotificationBroadcastReceiver"
+            android:exported="false" />
+
+        <service
+            android:name=".receiver.NotificationIntentService"
+            android:exported="false" />
     </application>
 
 </manifest>
