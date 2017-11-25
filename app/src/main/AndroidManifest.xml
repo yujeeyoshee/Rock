@@ -24,6 +24,10 @@
         <service
             android:name=".receiver.NotificationIntentService"
             android:exported="false" />
+
+        <service
+            android:name=".receiver.NotificationService"
+            android:exported="false" />
     </application>
 
 </manifest>

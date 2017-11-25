@@ -29,10 +29,10 @@ class MainActivity: AppCompatActivity() {
 
     private val localBroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            Log.w(LOG_TAG, "yay")
+            Log.w(LOG_TAG, "MainActivity.localBroadcastReceiver.onReceive()")
             when (intent.action) {
                 LOCAL_NOTIFICATION_DISMISSED -> {
-                    Log.w(LOG_TAG, "woohoo locally")
+                    Log.w(LOG_TAG, intent.action)
                     enableNotificationSwitch?.setChecked(false)
                 }
             }
@@ -48,14 +48,16 @@ class MainActivity: AppCompatActivity() {
         enableNotificationSwitch = findViewById<Switch>(R.id.enable_notification_switch)
         enableNotificationSwitch?.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
-                val notificationPayload = Notification.Builder(this)
+                val dismissIntent = constructOnDismissPendingIntent()
+                val clickIntent = constructOnClickPendingIntent()
+                val payload = Notification.Builder(this)
                         .setContentTitle(getString(R.string.easiest_screenshot))
                         .setContentText(getString(R.string.notification_content))
                         .setSmallIcon(R.drawable.ic_stat_onesignal_default)
-                        .setDeleteIntent(createOnDismissPendingIntent())
-                        .setContentIntent(createOnClickPendingIntent())
+                        .setDeleteIntent(dismissIntent)
+                        .setContentIntent(clickIntent)
                         .build()
-                notificationManager?.notify(NOTIFY_ID, notificationPayload)
+                notificationManager?.notify(NOTIFY_ID, payload)
                 Log.w(LOG_TAG, "on")
             } else {
                 notificationManager?.cancel(NOTIFY_ID)
@@ -67,22 +69,28 @@ class MainActivity: AppCompatActivity() {
                 .registerReceiver(localBroadcastReceiver, IntentFilter(LOCAL_NOTIFICATION_DISMISSED))
     }
 
-    private fun createOnDismissPendingIntent(): PendingIntent {
+    private fun constructOnDismissPendingIntent(): PendingIntent {
+        // BroadcastReceiver
         val intent = Intent(this, NotificationBroadcastReceiver::class.java)
         intent.action = ACTION_NOTIFICATION_CANCELED
         return PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT)
+
+        // IntentService
+//        val intent = Intent(this, NotificationIntentService::class.java)
+//        intent.action = ACTION_NOTIFICATION_CANCELED
+//        return PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT)
     }
 
-    private fun createOnClickPendingIntent(): PendingIntent {
+    private fun constructOnClickPendingIntent(): PendingIntent {
+        // BroadcastReceiver
         val intent = Intent(this, NotificationBroadcastReceiver::class.java)
         intent.action = ACTION_NOTIFICATION_CLICKED
         return PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT)
-    }
 
-    private fun createOnClickPendingIntent_IntentService(): PendingIntent {
-        val intent = Intent(this, NotificationIntentService::class.java)
-        intent.action = ACTION_NOTIFICATION_CLICKED
-        return PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT)
+        // IntentService
+//        val intent = Intent(this, NotificationIntentService::class.java)
+//        intent.action = ACTION_NOTIFICATION_CLICKED
+//        return PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT)
     }
 
     override fun onDestroy() {
