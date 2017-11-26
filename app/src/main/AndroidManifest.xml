@@ -24,10 +24,14 @@
         <service
             android:name=".receiver.NotificationIntentService"
             android:exported="false" />
-
         <service
             android:name=".receiver.NotificationService"
             android:exported="false" />
+
+        <activity
+            android:name=".ui.ScreenshotActivity"
+            android:theme="@style/Theme.AppCompat.Translucent"
+            android:launchMode="singleInstance" />
     </application>
 
 </manifest>
