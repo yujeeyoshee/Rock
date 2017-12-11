@@ -7,6 +7,9 @@ import android.support.v4.content.LocalBroadcastManager
 import android.util.Log
 import com.basicpencil.screenshot.ui.MainActivity
 import com.basicpencil.screenshot.ui.ScreenshotActivity
+import com.basicpencil.screenshot.util.Constants
+import com.basicpencil.screenshot.util.PrefUtil
+
 
 class NotificationBroadcastReceiver : BroadcastReceiver() {
     companion object {
@@ -25,18 +28,19 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
 //                context.startService(intent)
 
                 // Activity
-                val intent = Intent(context, ScreenshotActivity::class.java)
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // crashes without it
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION); // no transition
-                context.startActivity(intent)
+                val activityIntent = Intent(context, ScreenshotActivity::class.java)
+                activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) // crashes without it
+                activityIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION); // no transition
+                context.startActivity(activityIntent)
             }
 
             MainActivity.ACTION_NOTIFICATION_CANCELED -> {
                 Log.w(LOG_TAG, intent.action)
-                val intent = Intent(MainActivity.LOCAL_NOTIFICATION_DISMISSED)
-
+                val broadcastIntent = Intent(MainActivity.LOCAL_NOTIFICATION_DISMISSED)
                 LocalBroadcastManager.getInstance(context.applicationContext)
-                        .sendBroadcast(intent)
+                        .sendBroadcast(broadcastIntent)
+
+                PrefUtil.writeBoolean(Constants.PREF_NOTIFICATION_ENABLED, false)
             }
         }
     }

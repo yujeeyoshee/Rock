@@ -20,9 +20,9 @@ class NotificationIntentService : IntentService("NotificationIntentService") {
             }
             MainActivity.ACTION_NOTIFICATION_CANCELED -> {
                 Log.w(LOG_TAG, intent.action)
-                val intent = Intent(MainActivity.LOCAL_NOTIFICATION_DISMISSED)
+                val broadcastIntent = Intent(MainActivity.LOCAL_NOTIFICATION_DISMISSED)
                 LocalBroadcastManager.getInstance(applicationContext)
-                        .sendBroadcast(intent)
+                        .sendBroadcast(broadcastIntent)
             }
         }
     }

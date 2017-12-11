@@ -14,7 +14,8 @@ import android.content.Intent
 import android.content.BroadcastReceiver
 import android.content.IntentFilter
 import android.support.v4.content.LocalBroadcastManager
-import com.basicpencil.screenshot.receiver.NotificationIntentService
+import com.basicpencil.screenshot.util.Constants
+import com.basicpencil.screenshot.util.PrefUtil
 
 class MainActivity: AppCompatActivity() {
     companion object {
@@ -46,6 +47,10 @@ class MainActivity: AppCompatActivity() {
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager
 
         enableNotificationSwitch = findViewById<Switch>(R.id.enable_notification_switch)
+
+        if (PrefUtil.readBoolean(Constants.PREF_NOTIFICATION_ENABLED)) {
+            enableNotificationSwitch?.setChecked(true)
+        }
         enableNotificationSwitch?.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 val dismissIntent = constructOnDismissPendingIntent()
@@ -58,10 +63,15 @@ class MainActivity: AppCompatActivity() {
                         .setContentIntent(clickIntent)
                         .build()
                 notificationManager?.notify(NOTIFY_ID, payload)
+
                 Log.w(LOG_TAG, "on")
+
+                PrefUtil.writeBoolean(Constants.PREF_NOTIFICATION_ENABLED, true)
             } else {
                 notificationManager?.cancel(NOTIFY_ID)
                 Log.w(LOG_TAG, "off")
+
+                PrefUtil.writeBoolean(Constants.PREF_NOTIFICATION_ENABLED, false)
             }
         }
 
