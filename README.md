@@ -1,7 +1,7 @@
 # Rock
 
 #### Clone the repositories
-git clone git@github.com-mine:yujeeyoshee/Rock.git
+git clone git@github.com:yujeeyoshee/Rock.git
 git config user.name "Name"
 git config user.email "name@email"
 
